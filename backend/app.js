@@ -2,15 +2,27 @@ const express = require('express');
 
 const app = express();
 
-app.use((req, res,next) => {
-  console.log('first midlewasre ')
-  next();
-});
 
 
-app.use((req, res,next) => {
-  console.log('second midle');
-  res.send('hello from express test')
+app.use('/api/posts' , (req, res, next) => {
+  const posts = [
+    {
+    id: 'fdfk33',
+    title: "first server post",
+    content: "this my first vconter"
+    },
+    {
+      id: 'fdfk33',
+      title: "second server post",
+      content: "this my first vconter"
+    }
+  ]
+
+
+  res.status(200).json({
+    message: 'post sent succefly',
+    posts: posts
+  })
 });
 
 module.exports = app;
