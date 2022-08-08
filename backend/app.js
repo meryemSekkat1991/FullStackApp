@@ -1,16 +1,29 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
 
 //if ports are diffrent
 app.use((red, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', "*");
-  res.setHeader('Access-Control-Allow-Header', 'Origin X-Requested-With content-type, Accept')
-  res.setHeader('Access-Control-Allow-Methods', "GET, POST,PATCH, DELETE, Option");
+  res.setHeader('Access-Control-Allow-Headers', 'Origin X-Requested-With content-type, Accept')
+  res.setHeader('Access-Control-Allow-Methods', "GET, POST,PATCH, DELETE, OPTION");
   next();
 })
 
-app.use('/api/posts' , (req, res, next) => {
+
+app.post("/api/posts", (req, res, next) => {
+  const post = req.body;
+  console.log(post);
+  res.status(201).json({
+    message: 'Post added successfully'
+  });
+});
+
+app.get('/api/posts' , (req, res, next) => {
   const posts = [
     {
     id: 'fdfk33',

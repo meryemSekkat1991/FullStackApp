@@ -14,14 +14,17 @@ export class PostCreateComponent implements OnInit {
   constructor(public postService: PostService) { }
 
   onAddPost(form: NgForm): void {
-    console.log('lolo')
     if(form.invalid) {
       return
     } else {
-      this.postService.addPost(form.value.title, form.value.content);
+      this.postService.addPost({
+        title: form.value.title,
+        content: form.value.content
+      }).subscribe(() => {
+        console.log('posted')
+        });
     }
     form.reset();
-
   }
 
   ngOnInit(): void {
