@@ -19,7 +19,7 @@ export class PostService {
     return this.postUpdated.asObservable();
   }
 
-  addPost(post: Post): Observable<any> {
+    addPost(post: Post): Observable<any> {
     return this.httpClient.post('http://localhost:3000/api/posts', post)
   }
 }
