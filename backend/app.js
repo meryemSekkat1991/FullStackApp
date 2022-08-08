@@ -2,7 +2,13 @@ const express = require('express');
 
 const app = express();
 
-
+//if ports are diffrent
+app.use((red, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', "*");
+  res.setHeader('Access-Control-Allow-Header', 'Origin X-Requested-With content-type, Accept')
+  res.setHeader('Access-Control-Allow-Methods', "GET, POST,PATCH, DELETE, Option");
+  next();
+})
 
 app.use('/api/posts' , (req, res, next) => {
   const posts = [
