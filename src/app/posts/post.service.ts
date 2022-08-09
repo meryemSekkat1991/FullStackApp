@@ -27,9 +27,6 @@ export class PostService {
 
   deletePost(id: string) {
     return this.httpClient.delete('http://localhost:3000/api/posts/' + id)
-      .subscribe(() => {
-        console.log('deleted')
-      })
   }
 }
 

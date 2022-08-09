@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Post} from "../post.model";
 import {PostService} from "../post.service";
 import {Subscription} from "rxjs";
@@ -24,6 +24,10 @@ export class PostListComponent implements OnInit {
   }
 
   onDelete(post: Post): void {
-    this.postsService.deletePost(post._id as string);
+    this.postsService.deletePost(post._id as string).subscribe( () => {
+      this.postsService.getPost().subscribe(data => {
+        this.posts = data.posts
+      });
+    });
   }
 }
