@@ -8,17 +8,23 @@ import {HttpClient} from "@angular/common/http";
 export class PostService {
   domain = "http://localhost:3000"
   private posts: Post[] = [];
-  private postUpdated = new Subject<Post[]>();
+  private postsUpdated = new Subject<Post[]>();
 
   constructor(private httpClient: HttpClient) {}
 
-  getPost() {
-    return this.httpClient.get<{meesage: string, posts: Post[]}>
-    ('http://localhost:3000/api/posts')
+  getPosts() {
+    this.httpClient
+      .get<{ message: string; posts: Post[] }>(
+        "http://localhost:3000/api/posts"
+      )
+      .subscribe(postData => {
+        this.posts = postData.posts;
+        this.postsUpdated.next([...this.posts]);
+      });
   }
 
   getpostupdtaeleistenr() {
-    return this.postUpdated.asObservable();
+    return this.postsUpdated.asObservable();
   }
 
   addPost(post: Post): Observable<any> {
