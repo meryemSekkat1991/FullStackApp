@@ -1,5 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Post} from "../post.model";
+import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {PostService} from "../post.service";
 
