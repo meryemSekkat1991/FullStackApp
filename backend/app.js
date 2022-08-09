@@ -6,7 +6,7 @@ const Post = require('./models/post')
 
 const app = express();
 
-mongoose.connect('mongodb+srv://meryemsekk:MxsrRivZ3m45mAd9@cluster0.gkt67j4.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://meryemsekk:MxsrRivZ3m45mAd9@cluster0.gkt67j4.mongodb.net/fullstack=true&w=majority')
   .then(( ) => {
     console.log("connected")
   })
@@ -26,27 +26,14 @@ app.use((red, res, next) => {
 })
 
 
-const posts = [
-  {
-    id: 'fdfk33',
-    title: "first server post",
-    content: "this my first vconter"
-  },
-  {
-    id: 'fdfk33',
-    title: "second server post",
-    content: "this my first vconter"
-  }
-]
+const posts = []
 
 app.post("/api/posts", (req, res, next) => {
   const post = new Post({
     title: req.body.title,
     content: req.body.content
   });
-  console.log(post);
-
-  posts.push(post)
+  post.save();
 
   res.status(201).json({
     message: 'Post added successfully',
@@ -55,13 +42,14 @@ app.post("/api/posts", (req, res, next) => {
 });
 
 app.get('/api/posts' , (req, res, next) => {
-
-
-
-  res.status(200).json({
-    message: 'post sent succefly',
-    posts: posts
-  })
+  Post.find()
+    .then(documents => {
+      res.status(200).json({
+        message: 'post fetched successfly',
+        posts: documents
+      })
+    })
+    .catch();
 });
 
 module.exports = app;
