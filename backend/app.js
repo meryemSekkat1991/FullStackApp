@@ -33,7 +33,12 @@ app.post("/api/posts", (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
-  post.save();
+  post.save().then(result => {
+    res.status(201).json({
+      message: "posted",
+      postId: result._id
+    })
+  });
 
   res.status(201).json({
     message: 'Post added successfully',

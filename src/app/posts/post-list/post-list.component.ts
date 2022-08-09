@@ -15,9 +15,6 @@ export class PostListComponent implements OnInit {
 
   ngOnInit() {
     this.postsService.getPost()
-      .subscribe( data => {
-      this.posts = data.posts
-    })
     this.postSub = this.postsService.getpostupdtaeleistenr().subscribe((posts: Post[]) => {
       this.posts = posts;
     })
@@ -25,9 +22,7 @@ export class PostListComponent implements OnInit {
 
   onDelete(post: Post): void {
     this.postsService.deletePost(post._id as string).subscribe( () => {
-      this.postsService.getPost().subscribe(data => {
-        this.posts = data.posts
-      });
+      this.postsService.getPost()
     });
   }
 }
