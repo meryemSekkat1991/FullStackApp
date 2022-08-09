@@ -34,6 +34,18 @@ export class PostService {
     })
   }
 
+  updatePost(id: string, title: string, content: string) {
+    const post: Post = {_id: id , title: title, content: content};
+    return this.httpClient.put('http://localhost:3000/api/posts/' + id, post)
+      .subscribe(res => {
+        console.log(res)
+      })
+  }
+
+  getPostItem(id: string) {
+    return {...this.posts.find(p => p._id === id)}
+  }
+
   deletePost(id: string) {
     return this.httpClient.delete('http://localhost:3000/api/posts/' + id)
   }
