@@ -15,3 +15,4 @@
   </mat-expansion-panel>
 </mat-accordion>
 <p class="mat-body-1 info-text" style="margin-top: 16px" *ngIf="posts.length <=0 && !loading">No posts added yet!!</p>
+<mat-paginator [length]="totalPosts" [pageSize]="pagesize" [pageSizeOptions]="pagesizeoptions" (page)="onChangePage($event)"></mat-paginator>
