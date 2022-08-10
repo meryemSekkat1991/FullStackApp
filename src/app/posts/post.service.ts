@@ -25,14 +25,23 @@ export class PostService {
     return this.postUpdated.asObservable();
   }
 
-  addPost(post: Post) {
-    return this.httpClient.post('http://localhost:3000/api/posts', post).subscribe(data => {
-      console.log(data);
-      let res = data as { message: string, postId:string}
-      post._id = res.postId as string;
-      this.posts.push(post);
-      this.postUpdated.next([...this.posts]);
-      this.router.navigate(['/']);
+  addPost(title: string, content: string, image: File) {
+    const postdata = new FormData();
+    postdata.append("title", title);
+    postdata.append("content", content);
+    // @ts-ignore
+    postdata.append('image', image, title )
+    return this.httpClient.post('http://localhost:3000/api/posts', postdata)
+      .subscribe(responseData => {
+        const post: Post = {
+          // @ts-ignore
+          _id: responseData.postId,
+          title: title,
+          content: content
+        }
+        this.posts.push(post);
+        this.postUpdated.next([...this.posts]);
+        this.router.navigate(['/']);
     })
   }
 
