@@ -12,11 +12,14 @@ export class PostListComponent implements OnInit {
   posts: Post[] = [];
   private postSub: Subscription = new Subscription();
   constructor(public postsService: PostService) { }
+  loading = false;
 
   ngOnInit() {
+    this.loading = true;
     this.postsService.getPost()
     this.postSub = this.postsService.getpostupdtaeleistenr().subscribe((posts: Post[]) => {
       this.posts = posts;
+      this.loading = false;
     })
   }
 
