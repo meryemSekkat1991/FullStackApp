@@ -29,6 +29,7 @@
       <input placeholder="Post title"
              matInput
              formControlName="title"
+             [ngModel]="form.value.title"
              type="text">
       <mat-error *ngIf="form.get('title')?.invalid"> please enter valid title</mat-error>
     </mat-form-field>
