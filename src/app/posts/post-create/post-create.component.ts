@@ -18,6 +18,7 @@ export class PostCreateComponent implements OnInit {
   constructor(public postService: PostService , public route: ActivatedRoute) { };
   loading = false;
   form: FormGroup = new FormGroup({});
+  myImagePreview: string = "";
 
   /* onSavePost(form: NgForm): void {
   this.loading = true;
@@ -87,6 +88,11 @@ ngOnInit(): void {
     this.form.patchValue({image: file})
     this.form.get('image')?.updateValueAndValidity();
     console.log(file);
-    console.log(this.form)
+    console.log(this.form);
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.myImagePreview = reader.result as string;
+    }
+    reader.readAsDataURL(file)
   }
 }
