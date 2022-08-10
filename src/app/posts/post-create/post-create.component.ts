@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {FormControl, FormGroup, NgForm , Validators} from "@angular/forms";
 import {PostService} from "../post.service";
 import {ActivatedRoute} from "@angular/router";
 import {Post} from "../post.model";
@@ -17,40 +17,67 @@ export class PostCreateComponent implements OnInit {
   postItem: Post = {_id: "", content: "", title: ""};
   constructor(public postService: PostService , public route: ActivatedRoute) { };
   loading = false;
+  form: FormGroup = new FormGroup({});
 
-  onSavePost(form: NgForm): void {
+  /* onSavePost(form: NgForm): void {
+  this.loading = true;
+  if(form.invalid) {
+    return
+  } else {
+    if(this.mode === 'create') {
+      this.postService.addPost({
+        title: form.value.title,
+        content: form.value.content
+      })
+    } else  {
+      this.postService.updatePost(this.postId, form.value.title, form.value.content)
+    }
+  }
+  form.reset();
+ } */
+
+ngOnInit(): void {
+  this.form = new FormGroup({
+    'title': new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
+    'content': new FormControl(null, {validators: Validators.required} )
+  })
+  this.route.paramMap.subscribe((paramsMap) => {
+    if(paramsMap.has('id')) {
+      this.mode = 'edit'
+      this.postId = paramsMap.get('id') as string;
+      this.loading = true;
+      setTimeout(() => {
+        this.postService.getPostItem(this.postId).subscribe( postdata => {
+          this.postItem = {_id: postdata._id as string, content: postdata.content, title: postdata.title}
+          this.form.setValue({
+            'title': this.postItem.title,
+            'content': this.postItem.content})
+        })
+        this.loading = false;
+      }, 500)
+    } else {
+      this.mode = 'create'
+    }
+  });
+}
+  onSavePost(): void {
     this.loading = true;
-    if(form.invalid) {
+    if(this.form.invalid) {
       return
     } else {
       if(this.mode === 'create') {
         this.postService.addPost({
-          title: form.value.title,
-          content: form.value.content
+          title: this.form.value.title,
+          content: this.form.value.content
         })
       } else  {
-        this.postService.updatePost(this.postId, form.value.title, form.value.content)
+        this.postService.updatePost(
+          this.postId,
+          this.form.value.title,
+          this.form.value.content)
       }
     }
-    form.reset();
+    this.form.reset();
   }
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe((paramsMap) => {
-      if(paramsMap.has('id')) {
-        this.mode = 'edit'
-        this.postId = paramsMap.get('id') as string;
-        this.loading = true;
-        setTimeout(() => {
-          this.postService.getPostItem(this.postId).subscribe( postdata => {
-            this.postItem = {_id: postdata._id as string, content: postdata.content, title: postdata.title}
-          })
-          this.loading = false;
-        }, 500)
-
-      } else {
-        this.mode = 'create'
-      }
-    });
-  }
 }
