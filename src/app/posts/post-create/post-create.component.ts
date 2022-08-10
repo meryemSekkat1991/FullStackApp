@@ -48,13 +48,18 @@ ngOnInit(): void {
     })
   })
   this.route.paramMap.subscribe((paramsMap) => {
-    if(paramsMap.has('id')) {
+    if(paramsMap.has('postId')) {
       this.mode = 'edit'
       this.postId = paramsMap.get('id') as string;
       this.loading = true;
       setTimeout(() => {
         this.postService.getPostItem(this.postId).subscribe( postdata => {
-          this.postItem = {_id: postdata._id as string, content: postdata.content, title: postdata.title}
+          this.postItem = {
+            _id: postdata._id as string,
+            content: postdata.content,
+            title: postdata.title,
+            imagePath: ""
+          }
           this.form.setValue({
             'title': this.postItem.title,
             'content': this.postItem.content})
