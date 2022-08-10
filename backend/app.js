@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const  postsRoutes = require('./route/posts')
+const  postsRoutes = require('./route/posts');
+const path = require('path')
 const app = express();
 
 mongoose.connect('mongodb+srv://meryemsekk:MxsrRivZ3m45mAd9@cluster0.gkt67j4.mongodb.net/fullstack=true&w=majority')
@@ -14,6 +15,7 @@ mongoose.connect('mongodb+srv://meryemsekk:MxsrRivZ3m45mAd9@cluster0.gkt67j4.mon
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
+app.use("/images", express.static(path.join("backend/images")));
 
 //if ports are diffrent
 app.use((red, res, next) => {
