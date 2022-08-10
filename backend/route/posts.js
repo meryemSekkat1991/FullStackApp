@@ -26,6 +26,7 @@ router.post("", (req, res, next) => {
     Post.updateOne({ _id: req.params._id }, post).then(result => {
       res.status(200).json({ message: "Update successful!" });
     });
+    post.save();
   })
 
   res.status(201).json({
