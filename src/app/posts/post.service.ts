@@ -51,33 +51,38 @@ export class PostService {
     })
   }
 
-  updatePost(id: string, title: string, content: string, image: File | string ) {
+  updatePost(id: string, title: string, content: string, image: File | string) {
     let postData: Post | FormData;
-    if(typeof(image) === 'object') {
+    if (typeof image === "object") {
       postData = new FormData();
-      postData.append("id", id)
+      postData.append("id", id);
       postData.append("title", title);
-      postData.append('content', content);
-      postData.append("image", image, title)
+      postData.append("content", content);
+      postData.append("image", image, title);
     } else {
-     postData = { _id: id, title: title, content: content, imagePath: image}
+      postData = {
+        _id: id,
+        title: title,
+        content: content,
+        imagePath: image
+      };
     }
-    const post: Post = {_id: id , title: title, content: content, imagePath: ""};
-    return this.httpClient.put('http://localhost:3000/api/posts/' + id, postData)
-      .subscribe(res => {
+    this.httpClient
+      .put("http://localhost:3000/api/posts/" + id, postData)
+      .subscribe(response => {
         const updatedPosts = [...this.posts];
-        const oldpostindex = updatedPosts.findIndex( p => p._id === post._id);
-        // @ts-ignore
+        const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
         const post: Post = {
           _id: id,
+          title: title,
           content: content,
-          title: title
-        }
-        updatedPosts[oldpostindex] = post;
+          imagePath: ""
+        };
+        updatedPosts[oldPostIndex] = post;
         this.posts = updatedPosts;
         this.postUpdated.next([...this.posts]);
-        this.router.navigate(['/'])
-      })
+        this.router.navigate(["/"]);
+      });
   }
 
   getPostItem(id: string): Observable<Post> {
