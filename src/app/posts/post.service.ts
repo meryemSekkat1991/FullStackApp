@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Post} from "./post.model";
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 
 
@@ -38,17 +38,19 @@ export class PostService {
     const post: Post = {_id: id , title: title, content: content};
     return this.httpClient.put('http://localhost:3000/api/posts/' + id, post)
       .subscribe(res => {
-        console.log(res)
+        const updatedPosts = [...this.posts];
+        const oldpostindex = updatedPosts.findIndex( p => p._id === post._id)
+        updatedPosts[oldpostindex] = post;
+        this.posts = updatedPosts;
+        this.postUpdated.next([...this.posts])
       })
   }
 
-  getPostItem(id: string) {
-    return {...this.posts.find(p => p._id === id)}
+  getPostItem(id: string): Observable<Post> {
+    return this.httpClient.get<Post>('http://localhost:3000/api/posts/' + id)
   }
 
   deletePost(id: string) {
     return this.httpClient.delete('http://localhost:3000/api/posts/' + id)
   }
 }
-
-
