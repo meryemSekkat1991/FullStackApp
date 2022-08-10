@@ -61,9 +61,9 @@ ngOnInit(): void {
             imagePath: postdata.imagePath
           }
           this.form.setValue({
-            'title': this.postItem.title,
-            'content': this.postItem.content,
-            imagePath: this.postItem.imagePath
+            title: this.postItem.title,
+            content: this.postItem.content,
+            image: this.postItem.imagePath
           })
         })
         this.loading = false;
