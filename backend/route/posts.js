@@ -36,6 +36,7 @@ router.post(
   "",
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
+    // constrat url to server
     const url = req.protocol + "://" + req.get("host");
     const post = new Post({
       title: req.body.title,
@@ -54,35 +55,6 @@ router.post(
   }
 );
 
-
-router.post("", multer({storage: storage}).single("image"), (req, res, next) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content
-  });
-  post.save().then(result => {
-    res.status(201).json({
-      message: "posted",
-      postId: result._id
-    })
-  }).catch(() => {});
-
-  router.put("/:id", (req, res, next) => {
-    const post = new Post({
-      _id: req.body.id,
-      title: req.body.title,
-      content: req.body.content
-    });
-    Post.updateOne({ _id: req.params._id }, post).then(result => {
-      res.status(200).json({ message: "Update successful!" });
-    });
-  })
-
-  res.status(201).json({
-    message: 'Post added successfully',
-    posts: posts
-  });
-});
 
 router.get('/:id', (req, res, next) => {
   Post.findById(req.params.id).then(post => {
