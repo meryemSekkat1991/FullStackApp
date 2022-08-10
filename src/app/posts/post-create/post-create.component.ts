@@ -14,7 +14,7 @@ export class PostCreateComponent implements OnInit {
   entredTitle = "";
   mode = "create";
   private postId: string= '';
-  postItem : Post = {content: "", title: ""};
+  postItem: Post = {_id: "", content: "", title: ""};
   constructor(public postService: PostService , public route: ActivatedRoute) { }
 
   onSavePost(form: NgForm): void {
@@ -38,8 +38,9 @@ export class PostCreateComponent implements OnInit {
       if(paramsMap.has('id')) {
         this.mode = 'edit'
         this.postId = paramsMap.get('id') as string;
-        // @ts-ignore
-        this.postItem = this.postService.getPostItem(this.postId)
+        this.postService.getPostItem(this.postId).subscribe( postdata => {
+          this.postItem = {_id: postdata._id as string, content: postdata.content, title: postdata.title}
+        });
       } else {
         this.mode = 'create'
       }
