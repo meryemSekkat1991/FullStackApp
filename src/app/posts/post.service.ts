@@ -31,13 +31,17 @@ export class PostService {
     postdata.append("content", content);
     // @ts-ignore
     postdata.append('image', image, title )
-    return this.httpClient.post('http://localhost:3000/api/posts', postdata)
+    return this.httpClient.post<{message: string, post: Post}>
+    ('http://localhost:3000/api/posts',
+      postdata
+    )
       .subscribe(responseData => {
         const post: Post = {
           // @ts-ignore
-          _id: responseData.postId,
+          _id: responseData.post._id,
           title: title,
-          content: content
+          content: content,
+          imagePath: responseData.post.imagePath
         }
         this.posts.push(post);
         this.postUpdated.next([...this.posts]);
@@ -46,7 +50,7 @@ export class PostService {
   }
 
   updatePost(id: string, title: string, content: string) {
-    const post: Post = {_id: id , title: title, content: content};
+    const post: Post = {_id: id , title: title, content: content, imagePath: ""};
     return this.httpClient.put('http://localhost:3000/api/posts/' + id, post)
       .subscribe(res => {
         const updatedPosts = [...this.posts];
