@@ -3,6 +3,7 @@ import {Post} from "./post.model";
 import {map, Observable, Subject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {response} from "express";
 
 
 @Injectable({providedIn: 'root'})
@@ -50,12 +51,28 @@ export class PostService {
     })
   }
 
-  updatePost(id: string, title: string, content: string) {
+  updatePost(id: string, title: string, content: string, image: File | string ) {
+    let postData: Post | FormData;
+    if(typeof(image) === 'object') {
+      postData = new FormData();
+      postData.append("id", id)
+      postData.append("title", title);
+      postData.append('content', content);
+      postData.append("image", image, title)
+    } else {
+     postData = { _id: id, title: title, content: content, imagePath: image}
+    }
     const post: Post = {_id: id , title: title, content: content, imagePath: ""};
-    return this.httpClient.put('http://localhost:3000/api/posts/' + id, post)
+    return this.httpClient.put('http://localhost:3000/api/posts/' + id, postData)
       .subscribe(res => {
         const updatedPosts = [...this.posts];
-        const oldpostindex = updatedPosts.findIndex( p => p._id === post._id)
+        const oldpostindex = updatedPosts.findIndex( p => p._id === post._id);
+        // @ts-ignore
+        const post: Post = {
+          _id: id,
+          content: content,
+          title: title
+        }
         updatedPosts[oldpostindex] = post;
         this.posts = updatedPosts;
         this.postUpdated.next([...this.posts]);

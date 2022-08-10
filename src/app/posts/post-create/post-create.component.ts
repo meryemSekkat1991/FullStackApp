@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, NgForm , Validators} from "@angular/forms";
 import {PostService} from "../post.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Post} from "../post.model";
 import { mimeType } from "./mine-type.validator";
 
@@ -47,10 +47,10 @@ ngOnInit(): void {
       asyncValidators: [mimeType]
     })
   })
-  this.route.paramMap.subscribe((paramsMap) => {
+  this.route.paramMap.subscribe((paramsMap:ParamMap) => {
     if(paramsMap.has('postId')) {
       this.mode = 'edit'
-      this.postId = paramsMap.get('id') as string;
+      this.postId = paramsMap.get('postId') as string;
       this.loading = true;
       setTimeout(() => {
         this.postService.getPostItem(this.postId).subscribe( postdata => {
@@ -58,11 +58,13 @@ ngOnInit(): void {
             _id: postdata._id as string,
             content: postdata.content,
             title: postdata.title,
-            imagePath: ""
+            imagePath: postdata.imagePath
           }
           this.form.setValue({
             'title': this.postItem.title,
-            'content': this.postItem.content})
+            'content': this.postItem.content,
+            imagePath: this.postItem.imagePath
+          })
         })
         this.loading = false;
       }, 500)
@@ -82,7 +84,8 @@ ngOnInit(): void {
         this.postService.updatePost(
           this.postId,
           this.form.value.title,
-          this.form.value.content)
+          this.form.value.content,
+          this.form.value.image)
       }
     }
     this.form.reset();
