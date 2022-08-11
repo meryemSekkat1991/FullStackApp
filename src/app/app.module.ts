@@ -17,18 +17,22 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {PostService} from "./posts/post.service";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import { SignupComponent } from './auth/signup/signup.component';
+import {LoginComponent} from "./auth/login/login.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     PostCreateComponent,
     HeaderComponent,
-    PostListComponent
+    PostListComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    //FormsModule,
+    FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatInputModule,
