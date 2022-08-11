@@ -6,8 +6,6 @@ const checkoff = require('../middleware/check-auth')
 
 const router = express.Router();
 
-const posts = []
-
 const MIME_TYPE_MAP = {
   "image/png": "png",
   "image/jpeg": "jpg",
@@ -43,8 +41,11 @@ router.post(
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      imagePath: url + "/images/" + req.file.filename
+      imagePath: url + "/images/" + req.file.filename,
+      creator: req.userData.userId
     });
+    console.log(req.userData)
+    //return res.status(200).json()
     post.save().then(createdPost => {
       res.status(201).json({
         message: "Post added successfully",
