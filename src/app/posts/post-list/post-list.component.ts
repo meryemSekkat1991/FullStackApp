@@ -21,7 +21,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   pagesize = 2;
   pagesizeoptions = [1, 2, 5, 10];
   currentPage = 1;
-  perPage = 3;
+  perPage = 8;
   isAuth = false;
   userIdField: string | undefined;
 
