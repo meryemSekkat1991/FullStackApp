@@ -9,7 +9,7 @@ const userRoutes = require('./route/user')
 const path = require('path')
 const app = express();
 
-mongoose.connect('mongodb+srv://meryemsekk:MxsrRivZ3m45mAd9@cluster0.gkt67j4.mongodb.net/fullstack=true&w=majority')
+mongoose.connect('mongodb+srv://meryemsekk:'+process.env.MONGO_ATLAS_PW+'@cluster0.gkt67j4.mongodb.net/fullstack=true&w=majority')
   .then(( ) => {
     console.log("connected")
   })
