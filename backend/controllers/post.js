@@ -71,35 +71,30 @@ exports.getPosts = (req, res, next) => {
 }
 
 
-exports.updatePost =  (req, res, next) => {
+exports.updatePost = (req, res, next) => {
   let imagePath = req.body.imagePath;
   if (req.file) {
     const url = req.protocol + "://" + req.get("host");
-    imagePath = url + "/images/" + req.file.filename
+    imagePath = url + "/images/" + req.file.filename;
   }
   const post = new Post({
-    _id: req.body._id,
+    _id: req.body.id,
     title: req.body.title,
     content: req.body.content,
     imagePath: imagePath,
     creator: req.userData.userId
   });
-  console.log(req.userData);
-  console.log(post)
-  Post.updateOne({ _id: req.params.id , creator: req.userData.userId}, post)
+  Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
     .then(result => {
       console.log(result)
-      if(result.matchedCount > 0) {
-        res.status(200).json({ message: "Update successful!" });
-      }
-      res.status(401).json({ message: "not authorized!" });
-  })
-  .catch(error => {
-    res.status(500).json({
-      message: "Updating post failed"
+      res.status(200).json({ message: "Update successful!" });
     })
-  });
-}
+    .catch(error => {
+      res.status(500).json({
+        message: "Couldn't udpate post!"
+      });
+    });
+};
 
 exports.deletePost = (req, res, next) => {
   Post.deleteOne({_id: req.params.id, creator: req.userData.userId}).then(result => {
