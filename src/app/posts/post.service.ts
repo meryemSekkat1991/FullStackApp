@@ -89,22 +89,12 @@ export class PostService {
         _id: id,
         title: title,
         content: content,
-        imagePath: image
+        imagePath: image,
       };
     }
     this.httpClient
       .put(BACKEND_URL + "/" + id, postData)
       .subscribe(response => {
-        const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex(p => p._id === id);
-        const post: Post = {
-          _id: id,
-          title: title,
-          content: content,
-          imagePath: ""
-        };
-        updatedPosts[oldPostIndex] = post;
-        this.posts = updatedPosts;
         this.router.navigate(["/"]);
       });
   }
